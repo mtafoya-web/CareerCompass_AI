@@ -11,7 +11,7 @@ class Club(models.Model):
     def __str__(self):
         return self.name
 
-class Events(models.Model):
+class Event(models.Model):
     EVENT_TYPES = [
         ("career_fair", "Career Fair"),
         ("workshop", "Workshop"),
