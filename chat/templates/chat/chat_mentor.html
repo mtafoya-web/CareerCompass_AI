@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Mentor</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #111827;
+    padding: 30px 20px;
+    border-right: 1px solid #1f2937;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #cbd5e1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: #1e293b;
+    color: white;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    max-width: 900px;
+    width: 100%;
+    margin: auto;
+    background: #1e293b;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.chat-header {
+    padding: 20px;
+    border-bottom: 1px solid #334155;
+}
+
+.chat-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.chat-header h2 {
+    margin: 0;
+    color: white;
+}
+
+.chat-header p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.clear-btn {
+    background: #ef4444;
+    border: none;
+    padding: 8px 14px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.clear-btn:hover {
+    background: #dc2626;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    display: flex;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.message.user .bubble {
+    background: #2563eb;
+    color: white;
+}
+
+.message.assistant .bubble {
+    background: #334155;
+    color: #e5e7eb;
+}
+
+.typing .bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    animation: blink 1.2s infinite;
+}
+
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40% { opacity: 1; transform: translateY(-2px); }
+}
+
+.chat-input-form {
+    display: flex;
+    border-top: 1px solid #334155;
+    padding: 15px;
+    gap: 10px;
+}
+
+.chat-input-form input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: white;
+}
+
+.chat-input-form input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.chat-input-form button {
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.chat-input-form button:hover {
+    background: #1d4ed8;
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">CareerCompass</div>
+        <nav class="nav">
+            <a href="{% url 'student_profile' %}">Profile</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Recommendations</a>
+            <a href="#">Events</a>
+            <a href="#">Internships</a>
+            <a href="#">Projects</a>
+            <a href="{% url 'chat_mentor' %}" class="active">Chat Mentor</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <div class="chat-wrapper">
+            <div class="chat-header">
+                <div class="chat-header-row">
+                    <div>
+                        <h2>AI Mentor</h2>
+                        <p>Your career guide</p>
+                    </div>
+                    <button id="clear-chat-btn" class="clear-btn" type="button">Clear Chat</button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                {% for message in messages %}
+                    <div class="message {% if message.sender == 'user' %}user{% else %}assistant{% endif %}">
+                        <div class="bubble">{{ message.content }}</div>
+                    </div>
+                {% empty %}
+                    <div class="message assistant">
+                        <div class="bubble">Hi — I’m your AI mentor. Ask me what to do next.</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form id="chat-form" class="chat-input-form">
+                {% csrf_token %}
+                <input id="chat-input" type="text" name="message" placeholder="Type your message..." required autocomplete="off" autofocus>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+const chatMessages = document.getElementById("chat-messages");
+const clearChatBtn = document.getElementById("clear-chat-btn");
+const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+const sendUrl = "{% url 'send_message' %}";
+const clearUrl = "{% url 'clear_chat' %}";
+
+function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function appendMessage(sender, content) {
+    const wrapper = document.createElement("div");
+    wrapper.className = `message ${sender}`;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = content;
+
+    wrapper.appendChild(bubble);
+    chatMessages.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function addTypingBubble() {
+    const wrapper = document.createElement("div");
+    wrapper.className = "message assistant typing";
+    wrapper.id = "typing-indicator";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = `
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    `;
+
+    wrapper.appendChild(bubble);
+    chatMessages.appendChild(wrapper);
+    scrollToBottom();
+}
+
+function removeTypingBubble() {
+    const typing = document.getElementById("typing-indicator");
+    if (typing) typing.remove();
+}
+
+chatForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    appendMessage("user", message);
+    chatInput.value = "";
+    chatInput.focus();
+    addTypingBubble();
+
+    const formData = new FormData();
+    formData.append("message", message);
+
+    try {
+        const response = await fetch(sendUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+            body: formData,
+        });
+
+        const data = await response.json();
+        removeTypingBubble();
+
+        if (!response.ok) {
+            appendMessage("assistant", data.error || "Something went wrong.");
+            return;
+        }
+
+        appendMessage("assistant", data.assistant_message);
+    } catch (error) {
+        removeTypingBubble();
+        appendMessage("assistant", "I hit a connection issue. Please try again.");
+    }
+});
+
+clearChatBtn.addEventListener("click", async function() {
+    const confirmed = window.confirm("Clear all chat messages?");
+    if (!confirmed) return;
+
+    try {
+        const response = await fetch(clearUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+            },
+        });
+
+        if (response.ok) {
+            chatMessages.innerHTML = `
+                <div class="message assistant">
+                    <div class="bubble">Chat cleared. Ask me anything.</div>
+                </div>
+            `;
+            scrollToBottom();
+        }
+    } catch (error) {
+        appendMessage("assistant", "Could not clear chat right now.");
+    }
+});
+
+scrollToBottom();
+</script>
+
+</body>
+</html>
