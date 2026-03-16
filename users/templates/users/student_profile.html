@@ -1,204 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Profile</title>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: #e5e7eb;
-        }
+<style>
+:root {
+    --bg: #f6f8fc;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --panel-3: #eef4ff;
+    --border: rgba(15, 23, 42, 0.08);
+    --text: #0f172a;
+    --muted: #64748b;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success: #22c55e;
+    --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+    --radius-xl: 24px;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+}
 
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .sidebar {
-            width: 250px;
-            background: #111827;
-            padding: 30px 20px;
-            border-right: 1px solid #1f2937;
-        }
+html, body {
+    height: 100%;
+}
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #f8fafc;
-            margin-bottom: 30px;
-        }
+body {
+    margin: 0;
+    font-family: Inter, Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.06), transparent 24%),
+        var(--bg);
+    color: var(--text);
+}
 
-        .nav {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
 
-        .nav a {
-            text-decoration: none;
-            color: #cbd5e1;
-            padding: 12px 14px;
-            border-radius: 10px;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
+.sidebar {
+    width: 270px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid var(--border);
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-        .nav a:hover,
-        .nav a.active {
-            background: #1e293b;
-            color: #ffffff;
-        }
+.brand {
+    padding: 10px 12px 18px;
+    border-bottom: 1px solid var(--border);
+}
 
-        .main {
-            flex: 1;
-            padding: 40px;
-            background: #0f172a;
-        }
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
 
-        .topbar {
-            margin-bottom: 30px;
-        }
+.brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--primary);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+}
 
-        .topbar h1 {
-            margin: 0 0 8px 0;
-            color: #f8fafc;
-            font-size: 30px;
-        }
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+}
 
-        .topbar p {
-            margin: 0;
-            color: #94a3b8;
-        }
+.logo-subtitle {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+}
 
-        .content-card {
-            max-width: 850px;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        }
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        form p {
-            margin-bottom: 18px;
-        }
+.nav-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 12px 2px;
+}
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 6px;
-            color: #cbd5e1;
-        }
+.nav a {
+    text-decoration: none;
+    color: #334155;
+    padding: 12px 14px;
+    border-radius: 14px;
+    transition: 0.2s ease;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+}
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #334155;
-            border-radius: 10px;
-            background: #0f172a;
-            color: #e5e7eb;
-            font-size: 14px;
-        }
+.nav a:hover {
+    background: rgba(37, 99, 235, 0.06);
+    border-color: rgba(37, 99, 235, 0.10);
+    color: #0f172a;
+}
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
+.nav a.active {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.06));
+    border-color: rgba(37, 99, 235, 0.16);
+    color: #0f172a;
+}
 
-        textarea {
-            resize: vertical;
-        }
+.sidebar-footer {
+    margin-top: auto;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: #ffffff;
+}
 
-        button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: background 0.2s ease;
-        }
+.sidebar-footer-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
 
-        button:hover {
-            background: #1d4ed8;
-        }
+.sidebar-footer-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
 
-        .helptext {
-            display: block;
-            margin-top: 4px;
-            font-size: 12px;
-            color: #94a3b8;
-        }
+.main {
+    flex: 1;
+    padding: 28px;
+    display: flex;
+    align-items: stretch;
+}
 
-        ul.errorlist {
-            color: #f87171;
-            margin: 5px 0;
-            padding-left: 20px;
-        }
+.profile-shell {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+}
 
-        @media (max-width: 900px) {
-            .layout {
-                flex-direction: column;
-            }
+.profile-wrapper {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
 
-            .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #1f2937;
-            }
+.profile-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), rgba(255,255,255,0.00));
+}
 
-            .nav {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
+.profile-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
 
-            .main {
-                padding: 20px;
-            }
-        }
-    </style>
+.profile-header h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+}
+
+.profile-header p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.12);
+    color: #166534;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pill::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--success);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
+}
+
+.form-body {
+    padding: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 20px;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.field-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    color: var(--text);
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.field-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.field-group input::placeholder,
+.field-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+    outline: none;
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    background: #ffffff;
+}
+
+.helptext {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.errorlist {
+    margin: 0 0 8px;
+    padding-left: 18px;
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.save-btn {
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.16);
+}
+
+.save-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.secondary-text {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.side-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+}
+
+.side-card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.side-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.info-item {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.info-item strong {
+    display: block;
+    color: #0f172a;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+@media (max-width: 1100px) {
+    .profile-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .side-panel {
+        order: -1;
+    }
+}
+
+@media (max-width: 800px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .main {
+        padding: 16px;
+    }
+
+    .profile-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
-    <div class="layout">
-        <aside class="sidebar">
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-badge">
+                <span class="brand-dot"></span>
+                AI Career Platform
+            </div>
             <div class="logo">CareerCompass</div>
-
-            <nav class="nav">
-                <a href="{% url 'student_profile' %}" class="active">Profile</a>
-                <a href="#">Dashboard</a>
-                <a href="#">Recommendations</a>
-                <a href="#">Events</a>
-                <a href="#">Internships</a>
-                <a href="#">Projects</a>
-                <a href="{% url 'chat_mentor' %}">Chat Mentor</a>
-            </nav>
-        </aside>
-
-        <main class="main">
-            <div class="topbar">
-                <h1>My Student Profile</h1>
-                <p>Update your academic background, goals, skills, and interests.</p>
+            <div class="logo-subtitle">
+                Personalized career guidance for CSU students.
             </div>
+        </div>
 
-            <div class="content-card">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Save Profile</button>
-                </form>
+        <nav class="nav">
+            <div class="nav-section-label">Workspace</div>
+            <a href="{% url 'student_profile' %}" class="active">Profile</a>
+            <a href="{% url 'chat_mentor' %}">Chat Mentor</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Recommendations</a>
+
+            <div class="nav-section-label">Opportunities</div>
+            <a href="#">Events</a>
+            <a href="#">Internships</a>
+            <a href="#">Projects</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-title">Profile Completeness</div>
+            <div class="sidebar-footer-text">
+                A stronger profile helps the mentor recommend better clubs, events,
+                projects, internships, and next steps.
             </div>
-        </main>
-    </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="profile-shell">
+            <section class="profile-wrapper">
+                <div class="profile-header">
+                    <div class="profile-header-row">
+                        <div>
+                            <h1>Student Profile</h1>
+                            <p>
+                                Update your academic background, goals, skills, and interests
+                                so CareerCompass can personalize your next best actions.
+                            </p>
+                        </div>
+                        <div class="status-pill">Profile active</div>
+                    </div>
+                </div>
+
+                <div class="form-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-grid">
+                            <div class="field-group">
+                                {{ form.campus.label_tag }}
+                                {{ form.campus }}
+                                {% if form.campus.errors %}{{ form.campus.errors }}{% endif %}
+                                {% if form.campus.help_text %}<span class="helptext">{{ form.campus.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group">
+                                {{ form.major.label_tag }}
+                                {{ form.major }}
+                                {% if form.major.errors %}{{ form.major.errors }}{% endif %}
+                                {% if form.major.help_text %}<span class="helptext">{{ form.major.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group">
+                                {{ form.year.label_tag }}
+                                {{ form.year }}
+                                {% if form.year.errors %}{{ form.year.errors }}{% endif %}
+                                {% if form.year.help_text %}<span class="helptext">{{ form.year.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group">
+                                {{ form.available_hours_per_week.label_tag }}
+                                {{ form.available_hours_per_week }}
+                                {% if form.available_hours_per_week.errors %}{{ form.available_hours_per_week.errors }}{% endif %}
+                                {% if form.available_hours_per_week.help_text %}<span class="helptext">{{ form.available_hours_per_week.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group full-width">
+                                {{ form.current_classes.label_tag }}
+                                {{ form.current_classes }}
+                                {% if form.current_classes.errors %}{{ form.current_classes.errors }}{% endif %}
+                                {% if form.current_classes.help_text %}<span class="helptext">{{ form.current_classes.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group full-width">
+                                {{ form.career_goals.label_tag }}
+                                {{ form.career_goals }}
+                                {% if form.career_goals.errors %}{{ form.career_goals.errors }}{% endif %}
+                                {% if form.career_goals.help_text %}<span class="helptext">{{ form.career_goals.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group full-width">
+                                {{ form.interests.label_tag }}
+                                {{ form.interests }}
+                                {% if form.interests.errors %}{{ form.interests.errors }}{% endif %}
+                                {% if form.interests.help_text %}<span class="helptext">{{ form.interests.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group">
+                                {{ form.target_roles.label_tag }}
+                                {{ form.target_roles }}
+                                {% if form.target_roles.errors %}{{ form.target_roles.errors }}{% endif %}
+                                {% if form.target_roles.help_text %}<span class="helptext">{{ form.target_roles.help_text }}</span>{% endif %}
+                            </div>
+
+                            <div class="field-group">
+                                {{ form.skills.label_tag }}
+                                {{ form.skills }}
+                                {% if form.skills.errors %}{{ form.skills.errors }}{% endif %}
+                                {% if form.skills.help_text %}<span class="helptext">{{ form.skills.help_text }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn">Save Profile</button>
+                            <span class="secondary-text">Changes help improve recommendations instantly.</span>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <aside class="side-panel">
+                <div class="side-card">
+                    <h3>Why this matters</h3>
+                    <p>
+                        Your profile powers the AI mentor. The more complete it is,
+                        the better the system can suggest relevant opportunities.
+                    </p>
+                </div>
+
+                <div class="side-card">
+                    <h3>Best info to include</h3>
+                    <div class="info-list">
+                        <div class="info-item">
+                            <strong>Current classes</strong>
+                            Add courses like Data Structures, Databases, or Marketing Analytics.
+                        </div>
+                        <div class="info-item">
+                            <strong>Target roles</strong>
+                            Examples: Backend Engineer, Data Analyst, Product Manager.
+                        </div>
+                        <div class="info-item">
+                            <strong>Skills</strong>
+                            Include tools and languages like Python, C++, SQL, Git, Django.
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</div>
+
 </body>
 </html>

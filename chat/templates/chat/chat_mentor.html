@@ -4,14 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat Mentor</title>
+
 <style>
-* { box-sizing: border-box; }
+:root {
+    --bg: #f6f8fc;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --panel-3: #eef4ff;
+    --border: rgba(15, 23, 42, 0.08);
+    --text: #0f172a;
+    --muted: #64748b;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --user-bubble: linear-gradient(135deg, #2563eb, #3b82f6);
+    --assistant-bubble: #f8fafc;
+    --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+    --radius-xl: 24px;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: #e5e7eb;
+    font-family: Inter, Arial, sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.06), transparent 24%),
+        var(--bg);
+    color: var(--text);
 }
 
 .layout {
@@ -20,144 +51,287 @@ body {
 }
 
 .sidebar {
-    width: 250px;
-    background: #111827;
-    padding: 30px 20px;
-    border-right: 1px solid #1f2937;
+    width: 270px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid var(--border);
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.brand {
+    padding: 10px 12px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--primary);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
 }
 
 .logo {
     font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: white;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+}
+
+.logo-subtitle {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 .nav {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+}
+
+.nav-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 12px 2px;
 }
 
 .nav a {
     text-decoration: none;
-    color: #cbd5e1;
+    color: #334155;
     padding: 12px 14px;
-    border-radius: 10px;
-    transition: 0.2s;
+    border-radius: 14px;
+    transition: 0.2s ease;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.nav a:hover,
+.nav a:hover {
+    background: rgba(37, 99, 235, 0.06);
+    border-color: rgba(37, 99, 235, 0.10);
+    color: #0f172a;
+}
+
 .nav a.active {
-    background: #1e293b;
-    color: white;
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.12), rgba(37, 99, 235, 0.06));
+    border-color: rgba(37, 99, 235, 0.16);
+    color: #0f172a;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.sidebar-footer-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+
+.sidebar-footer-text {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 .main {
     flex: 1;
+    padding: 28px;
     display: flex;
-    flex-direction: column;
-    padding: 30px;
+    align-items: stretch;
+}
+
+.chat-shell {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
 }
 
 .chat-wrapper {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 60px);
-    max-width: 900px;
-    width: 100%;
-    margin: auto;
-    background: #1e293b;
-    border-radius: 16px;
+    min-height: calc(100vh - 56px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: var(--shadow);
 }
 
 .chat-header {
-    padding: 20px;
-    border-bottom: 1px solid #334155;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), rgba(255,255,255,0.00));
 }
 
 .chat-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
 }
 
 .chat-header h2 {
     margin: 0;
-    color: white;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    color: #0f172a;
 }
 
 .chat-header p {
-    margin: 5px 0 0;
-    color: #94a3b8;
+    margin: 6px 0 0;
+    color: var(--muted);
     font-size: 14px;
 }
 
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    color: #1e3a8a;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pill::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #22c55e;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
+}
+
 .clear-btn {
-    background: #ef4444;
-    border: none;
-    padding: 8px 14px;
-    color: white;
-    border-radius: 8px;
+    background: transparent;
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
 .clear-btn:hover {
-    background: #dc2626;
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #991b1b;
 }
 
 .chat-messages {
     flex: 1;
-    padding: 20px;
+    padding: 24px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.02), rgba(255,255,255,0));
 }
 
 .message {
     display: flex;
+    width: 100%;
 }
 
 .message.user {
     justify-content: flex-end;
 }
 
+.message.assistant {
+    justify-content: flex-start;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 72%;
+}
+
+.message-meta {
+    font-size: 11px;
+    color: #94a3b8;
+    padding: 0 6px;
+}
+
+.message.user .message-meta {
+    text-align: right;
+}
+
 .bubble {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 14px;
+    padding: 14px 16px;
+    border-radius: 18px;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.55;
     white-space: pre-wrap;
     word-wrap: break-word;
+    border: 1px solid transparent;
 }
 
 .message.user .bubble {
-    background: #2563eb;
+    background: var(--user-bubble);
     color: white;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.16);
 }
 
 .message.assistant .bubble {
-    background: #334155;
-    color: #e5e7eb;
+    background: var(--assistant-bubble);
+    color: var(--text);
+    border-color: rgba(15, 23, 42, 0.06);
+    border-bottom-left-radius: 8px;
 }
 
 .typing .bubble {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    min-width: 72px;
 }
 
 .dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #cbd5e1;
+    background: #64748b;
     animation: blink 1.2s infinite;
 }
 
@@ -165,42 +339,170 @@ body {
 .dot:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes blink {
-    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
-    40% { opacity: 1; transform: translateY(-2px); }
+    0%, 80%, 100% {
+        opacity: 0.25;
+        transform: translateY(0);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+
+.chat-input-wrap {
+    padding: 18px;
+    border-top: 1px solid var(--border);
+    background: rgba(248, 250, 252, 0.9);
 }
 
 .chat-input-form {
     display: flex;
-    border-top: 1px solid #334155;
-    padding: 15px;
-    gap: 10px;
+    gap: 12px;
+    align-items: center;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 10px;
 }
 
 .chat-input-form input {
     flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #334155;
-    background: #0f172a;
-    color: white;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.chat-input-form input::placeholder {
+    color: #94a3b8;
 }
 
 .chat-input-form input:focus {
     outline: none;
-    border-color: #3b82f6;
 }
 
 .chat-input-form button {
-    background: #2563eb;
+    background: var(--primary);
     border: none;
     color: white;
-    padding: 10px 18px;
-    border-radius: 10px;
+    padding: 13px 18px;
+    border-radius: 14px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.16);
 }
 
 .chat-input-form button:hover {
-    background: #1d4ed8;
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.chat-input-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 0 4px;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.side-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+}
+
+.side-card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.side-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.quick-btn {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 13px;
+}
+
+.quick-btn:hover {
+    background: rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 0.12);
+}
+
+@media (max-width: 1100px) {
+    .chat-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .side-panel {
+        order: -1;
+    }
+}
+
+@media (max-width: 800px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .main {
+        padding: 16px;
+    }
+
+    .chat-wrapper {
+        min-height: calc(100vh - 220px);
+    }
+
+    .chat-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .message-content {
+        max-width: 88%;
+    }
 }
 </style>
 </head>
@@ -208,47 +510,119 @@ body {
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="logo">CareerCompass</div>
+        <div class="brand">
+            <div class="brand-badge">
+                <span class="brand-dot"></span>
+                AI Career Platform
+            </div>
+            <div class="logo">CareerCompass</div>
+            <div class="logo-subtitle">
+                Personalized career guidance for CSU students.
+            </div>
+        </div>
+
         <nav class="nav">
+            <div class="nav-section-label">Workspace</div>
             <a href="{% url 'student_profile' %}">Profile</a>
+            <a href="#" class="active">Chat Mentor</a>
             <a href="#">Dashboard</a>
             <a href="#">Recommendations</a>
+
+            <div class="nav-section-label">Opportunities</div>
             <a href="#">Events</a>
             <a href="#">Internships</a>
             <a href="#">Projects</a>
-            <a href="{% url 'chat_mentor' %}" class="active">Chat Mentor</a>
         </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-title">Student Focus</div>
+            <div class="sidebar-footer-text">
+                Ask about internships, projects, events, or your next best step.
+            </div>
+        </div>
     </aside>
 
     <main class="main">
-        <div class="chat-wrapper">
-            <div class="chat-header">
-                <div class="chat-header-row">
-                    <div>
-                        <h2>AI Mentor</h2>
-                        <p>Your career guide</p>
+        <div class="chat-shell">
+            <section class="chat-wrapper">
+                <div class="chat-header">
+                    <div class="chat-header-row">
+                        <div>
+                            <h2>AI Mentor</h2>
+                            <p>Chat-first guidance for your next best career move.</p>
+                        </div>
+
+                        <div class="header-actions">
+                            <div class="status-pill">Mentor online</div>
+                            <button id="clear-chat-btn" class="clear-btn" type="button">Clear Chat</button>
+                        </div>
                     </div>
-                    <button id="clear-chat-btn" class="clear-btn" type="button">Clear Chat</button>
                 </div>
-            </div>
 
-            <div class="chat-messages" id="chat-messages">
-                {% for message in messages %}
-                    <div class="message {% if message.sender == 'user' %}user{% else %}assistant{% endif %}">
-                        <div class="bubble">{{ message.content }}</div>
-                    </div>
-                {% empty %}
-                    <div class="message assistant">
-                        <div class="bubble">Hi — I’m your AI mentor. Ask me what to do next.</div>
-                    </div>
-                {% endfor %}
-            </div>
+                <div class="chat-messages" id="chat-messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender == 'user' %}user{% else %}assistant{% endif %}">
+                            <div class="message-content">
+                                <div class="message-meta">
+                                    {% if message.sender == 'user' %}You{% else %}AI Mentor{% endif %}
+                                </div>
+                                <div class="bubble">{{ message.content }}</div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="message assistant">
+                            <div class="message-content">
+                                <div class="message-meta">AI Mentor</div>
+                                <div class="bubble">Hi — I’m your AI mentor. Ask me what to do next.</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
 
-            <form id="chat-form" class="chat-input-form">
-                {% csrf_token %}
-                <input id="chat-input" type="text" name="message" placeholder="Type your message..." required autocomplete="off" autofocus>
-                <button type="submit">Send</button>
-            </form>
+                <div class="chat-input-wrap">
+                    <form id="chat-form" class="chat-input-form">
+                        {% csrf_token %}
+                        <input
+                            id="chat-input"
+                            type="text"
+                            name="message"
+                            placeholder="Ask about internships, projects, events, or your next step..."
+                            required
+                            autocomplete="off"
+                            autofocus
+                        >
+                        <button type="submit">Send</button>
+                    </form>
+                    <div class="chat-input-hint">
+                        Example: “I’m a sophomore CS major. What should I focus on this month?”
+                    </div>
+                </div>
+            </section>
+
+            <aside class="side-panel">
+                <div class="side-card">
+                    <h3>Conversation Tips</h3>
+                    <p>
+                        The best results come from sharing your major, year, current classes,
+                        and the role you want next.
+                    </p>
+                </div>
+
+                <div class="side-card">
+                    <h3>Quick Prompts</h3>
+                    <div class="quick-actions">
+                        <button class="quick-btn" type="button" onclick="fillPrompt('What should I do next for software engineering internships?')">
+                            What should I do next?
+                        </button>
+                        <button class="quick-btn" type="button" onclick="fillPrompt('Give me 3 project ideas based on my profile.')">
+                            Give me 3 project ideas
+                        </button>
+                        <button class="quick-btn" type="button" onclick="fillPrompt('What events or clubs should I join this month?')">
+                            Recommend events or clubs
+                        </button>
+                    </div>
+                </div>
+            </aside>
         </div>
     </main>
 </div>
@@ -270,11 +644,20 @@ function appendMessage(sender, content) {
     const wrapper = document.createElement("div");
     wrapper.className = `message ${sender}`;
 
+    const contentWrap = document.createElement("div");
+    contentWrap.className = "message-content";
+
+    const meta = document.createElement("div");
+    meta.className = "message-meta";
+    meta.textContent = sender === "user" ? "You" : "AI Mentor";
+
     const bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.textContent = content;
 
-    wrapper.appendChild(bubble);
+    contentWrap.appendChild(meta);
+    contentWrap.appendChild(bubble);
+    wrapper.appendChild(contentWrap);
     chatMessages.appendChild(wrapper);
     scrollToBottom();
 }
@@ -284,6 +667,13 @@ function addTypingBubble() {
     wrapper.className = "message assistant typing";
     wrapper.id = "typing-indicator";
 
+    const contentWrap = document.createElement("div");
+    contentWrap.className = "message-content";
+
+    const meta = document.createElement("div");
+    meta.className = "message-meta";
+    meta.textContent = "AI Mentor";
+
     const bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.innerHTML = `
@@ -292,7 +682,9 @@ function addTypingBubble() {
         <span class="dot"></span>
     `;
 
-    wrapper.appendChild(bubble);
+    contentWrap.appendChild(meta);
+    contentWrap.appendChild(bubble);
+    wrapper.appendChild(contentWrap);
     chatMessages.appendChild(wrapper);
     scrollToBottom();
 }
@@ -300,6 +692,11 @@ function addTypingBubble() {
 function removeTypingBubble() {
     const typing = document.getElementById("typing-indicator");
     if (typing) typing.remove();
+}
+
+function fillPrompt(text) {
+    chatInput.value = text;
+    chatInput.focus();
 }
 
 chatForm.addEventListener("submit", async function(event) {
@@ -355,7 +752,10 @@ clearChatBtn.addEventListener("click", async function() {
         if (response.ok) {
             chatMessages.innerHTML = `
                 <div class="message assistant">
-                    <div class="bubble">Chat cleared. Ask me anything.</div>
+                    <div class="message-content">
+                        <div class="message-meta">AI Mentor</div>
+                        <div class="bubble">Chat cleared. Ask me anything.</div>
+                    </div>
                 </div>
             `;
             scrollToBottom();
