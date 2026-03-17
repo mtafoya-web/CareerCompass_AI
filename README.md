@@ -79,7 +79,7 @@ The platform includes an AI mentor that users can interact with in real time to 
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
