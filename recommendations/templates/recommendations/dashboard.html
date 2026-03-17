@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendations</title>
+</head>
+<body>
+    <h1>Personalized Recommendations</h1>
+
+    {% if profile_missing %}
+        <p>Please complete your student profile first.</p>
+    {% else %}
+        <p>
+            <strong>{{ profile.major }}</strong> |
+            <strong>{{ profile.year }}</strong> |
+            <strong>Goals:</strong> {{ profile.career_goals }}
+        </p>
+
+        <ul>
+            {% for recommendation in recommendations %}
+                <li>
+                    <strong>{{ recommendation.title }}</strong>
+                    ({{ recommendation.recommendation_type }})
+                    <br>
+                    {{ recommendation.description }}
+                    <br>
+                    <em>Why:</em> {{ recommendation.reason }}
+                    <br>
+                    <em>Priority Score:</em> {{ recommendation.priority_score }}
+                </li>
+            {% empty %}
+                <li>No recommendations found yet.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

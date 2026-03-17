@@ -13,6 +13,15 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+#IBM SERVICE Keys
+import os
+
+IBM_WATSON_API_KEY = os.environ.get("IBM_WATSON_API_KEY", "")
+IBM_WATSON_DEPLOYMENT_URL = os.environ.get(
+    "IBM_WATSON_DEPLOYMENT_URL",
+    "https://us-south.ml.cloud.ibm.com/ml/v4/deployments/144d2a05-2a78-434c-aa17-b8c5e77a25e7/ai_service_stream"
+)
+IBM_WATSON_VERSION = "2021-05-01"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

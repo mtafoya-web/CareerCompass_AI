@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
 from .models import ChatSession, ChatMessage
+from .services.watson import chat_with_watson, WatsonAPIError
 from users.models import StudentProfile
 
 
@@ -36,7 +37,32 @@ def send_message(request):
     )
 
     profile = StudentProfile.objects.filter(user=request.user).first()
-    assistant_reply = generate_mock_reply(profile, user_text)
+
+    student_context = {}
+    if profile:
+        student_context = {
+            "student_profile": {
+                "campus": profile.campus,
+                "major": profile.major,
+                "year": profile.year,
+                "current_classes": profile.current_classes,
+                "career_goals": profile.career_goals,
+                "interests": profile.interests,
+                "target_roles": profile.target_roles,
+                "skills": profile.skills,
+                "available_hours_per_week": profile.available_hours_per_week,
+            }
+        }
+
+    try:
+        assistant_reply = chat_with_watson(
+            user_text=user_text,
+            student_context=student_context,
+        )
+    except WatsonAPIError as exc:
+        assistant_reply = f"I couldn't reach the Watson mentor service right now. {exc}"
+    except Exception:
+        assistant_reply = "I couldn't reach the Watson mentor service right now."
 
     ChatMessage.objects.create(
         session=session,
@@ -45,7 +71,6 @@ def send_message(request):
     )
 
     return JsonResponse({
-        "user_message": user_text,
         "assistant_message": assistant_reply,
     })
 
@@ -57,40 +82,3 @@ def clear_chat(request):
     if session:
         ChatMessage.objects.filter(session=session).delete()
     return JsonResponse({"success": True})
-
-
-def generate_mock_reply(profile, user_text):
-    lowered = user_text.lower()
-
-    if profile:
-        major = profile.major
-        year = profile.year
-        role = profile.target_roles or "career growth"
-    else:
-        major = "student"
-        year = "current"
-        role = "career growth"
-
-    if "internship" in lowered:
-        return (
-            f"As a {year} {major} student interested in {role}, "
-            "your next best step is to strengthen one portfolio project "
-            "and apply to a few roles this week."
-        )
-
-    if "project" in lowered:
-        return (
-            f"For a {major} student, a strong next project would be a practical app "
-            "that shows real skills and can be discussed in interviews."
-        )
-
-    if "event" in lowered or "club" in lowered:
-        return (
-            "I’d focus on one relevant club and one event that matches your goals "
-            "instead of trying to attend everything."
-        )
-
-    return (
-        f"You’re a {year} {major} student. Based on your message, "
-        "your next best action is to take one concrete career step this week."
-    )

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opportunities</title>
+</head>
+<body>
+    <h1>Opportunities Dashboard</h1>
+
+    {% if profile %}
+        <p>
+            <strong>Major:</strong> {{ profile.major }} |
+            <strong>Year:</strong> {{ profile.year }} |
+            <strong>Target Roles:</strong> {{ profile.target_roles }}
+        </p>
+    {% endif %}
+
+    <h2>Clubs</h2>
+    <ul>
+        {% for club in clubs %}
+            <li>
+                <strong>{{ club.name }}</strong> - {{ club.description }}
+            </li>
+        {% empty %}
+            <li>No matching clubs yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Events</h2>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.title }}</strong> - {{ event.date }} - {{ event.description }}
+            </li>
+        {% empty %}
+            <li>No matching events yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Internships</h2>
+    <ul>
+        {% for internship in internships %}
+            <li>
+                <strong>{{ internship.company }} - {{ internship.title }}</strong>
+                {% if internship.deadline %} (Deadline: {{ internship.deadline }}) {% endif %}
+            </li>
+        {% empty %}
+            <li>No matching internships yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Projects</h2>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <strong>{{ project.title }}</strong> - {{ project.description }}
+            </li>
+        {% empty %}
+            <li>No matching projects yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Mentors</h2>
+    <ul>
+        {% for mentor in mentors %}
+            <li>
+                <strong>{{ mentor.name }}</strong> - {{ mentor.role }}
+            </li>
+        {% empty %}
+            <li>No matching mentors yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
