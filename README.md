@@ -65,7 +65,7 @@ The platform includes an AI mentor that users can interact with in real time to 
 
 ---
 
-## ⚙️ How It Works
+##  How It Works
 
 1. User inputs skills, interests, or uploads a resume
 2. AI processes the data using Watson AI
