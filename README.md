@@ -135,10 +135,10 @@ CareerCompass_AI/
 
 ##  Future Improvements
 
-* 🔗 LinkedIn / GitHub profile analysis
-* 📊 Job market trend integration
-* 🎤 Voice-based AI mentor
-* 🌐 Deployment (AWS / Azure / IBM Cloud)
+*  LinkedIn / GitHub profile analysis
+*  Job market trend integration
+*  Voice-based AI mentor
+*  Deployment (AWS / Azure / IBM Cloud)
 
 ---
 
