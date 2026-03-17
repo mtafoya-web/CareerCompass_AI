@@ -523,15 +523,15 @@ body {
 
         <nav class="nav">
             <div class="nav-section-label">Workspace</div>
-            <a href="{% url 'student_profile' %}">Profile</a>
-            <a href="#" class="active">Chat Mentor</a>
-            <a href="#">Dashboard</a>
-            <a href="#">Recommendations</a>
+            <a href="{% url 'student_profile' %}" class="active">Profile</a>
+            <a href="{% url 'chat_mentor' %}">Chat Mentor</a>
+            <a href="{% url 'opportunities_dashboard' %}">Dashboard</a>
+            <a href="{% url 'recommendations_dashboard' %}">Recommendations</a>
 
             <div class="nav-section-label">Opportunities</div>
-            <a href="#">Events</a>
-            <a href="#">Internships</a>
-            <a href="#">Projects</a>
+            <a href="{% url 'opportunities_dashboard' %}#events">Events</a>
+            <a href="{% url 'opportunities_dashboard' %}#internships">Internships</a>
+            <a href="{% url 'opportunities_dashboard' %}#projects">Projects</a>
         </nav>
 
         <div class="sidebar-footer">
