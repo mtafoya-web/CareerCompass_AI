@@ -1,4 +1,4 @@
-#  Uni-Voyager — Your AI Career Mentor
+#  Voyager — Your AI Career Mentor(Hackathon Project)
 
 CareerCompass AI is an AI-powered career guidance platform that helps users navigate their professional journey using intelligent recommendations, resume analysis, and an interactive AI mentor built with IBM Watson AI.
 
